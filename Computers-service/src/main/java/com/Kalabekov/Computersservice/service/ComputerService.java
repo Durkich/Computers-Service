@@ -1,7 +1,12 @@
 package com.Kalabekov.Computersservice.service;
 
 import com.Kalabekov.Computersservice.model.Computer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+
+import java.util.Locale;
 
 
 @Service
@@ -15,23 +20,37 @@ public class ComputerService {
         computer.setPrice(68300f);
         return computer;
     }
-    public String createComputer(Computer computer){
+
+    @Qualifier("messageSource")
+    @Autowired
+    MessageSource messages;
+
+    public String createComputer(Computer computer, Locale locale){
         String response = null;
         if(computer!=null){
-            response = String.format("Это отбработка post, и объект - %s",computer.toString());
+            response = String.format(messages.getMessage(
+                    "computer.create.message", null,locale),
+                    computer.toString());
         }
         return response;
     }
-    public String updateComputer(Computer computer){
+
+    public String updateComputer(Computer computer, Locale locale){
         String response = null;
         if(computer!=null){
-            response = String.format("Это отбработка put, и объект - %s",computer.toString());
+            response = String.format(messages.getMessage(
+                    "computer.update.message", null,locale),
+                    computer.toString());
         }
         return response;
     }
-    public String deleteComputer(String computerId){
+
+    public String deleteComputer(String computerId, Locale locale){
         String response = null;
-        response = String.format("Удаление следующего компьютера со следующим номером %s",computerId);
+        response = String.format(messages.getMessage(
+                "computer.delete.message", null,locale),
+                computerId.toString());
+
         return response;
     }
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Locale;
+
 @RestController
 @RequestMapping(value = "computers")
 public class ComputerController {
@@ -19,18 +21,18 @@ public class ComputerController {
             return ResponseEntity.ok(computer);
     }
     @PutMapping
-    public ResponseEntity<String> updateComputer(@RequestBody Computer request){
-        return ResponseEntity.ok(computerService.updateComputer(request));
+    public ResponseEntity<String> updateComputer(@RequestBody Computer request, @RequestHeader(value = "Accept-Language",required = false) Locale locale){
+        return ResponseEntity.ok(computerService.updateComputer(request, locale));
 
     }
     @PostMapping
-    public ResponseEntity<String> createComputer(@RequestBody Computer request){
-        return ResponseEntity.ok(computerService.createComputer(request));
+    public ResponseEntity<String> createComputer(@RequestBody Computer request, @RequestHeader(value = "Accept-Language",required = false) Locale locale){
+        return ResponseEntity.ok(computerService.createComputer(request,locale));
 
     }
     @DeleteMapping(value="/{computerId}")
-    public ResponseEntity<String> deleteComputer(@PathVariable("computerId") String computerId){
-        return ResponseEntity.ok(computerService.deleteComputer(computerId));
+    public ResponseEntity<String> deleteComputer(@PathVariable("computerId") String computerId, @RequestHeader(value = "Accept-Language",required = false) Locale locale){
+        return ResponseEntity.ok(computerService.deleteComputer(computerId, locale));
     }
 
 
