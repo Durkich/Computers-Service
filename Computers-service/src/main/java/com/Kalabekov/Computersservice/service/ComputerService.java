@@ -1,56 +1,41 @@
 package com.Kalabekov.Computersservice.service;
 
+import com.Kalabekov.Computersservice.CollectionHandler;
 import com.Kalabekov.Computersservice.model.Computer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-
-import java.util.Locale;
-
 
 @Service
 public class ComputerService {
-    public Computer getComputer(String computerID){
-        Computer computer = new Computer();
-        computer.setId(1);
-        computer.setDescription("Пк такой-то такой-то");
-        computer.setComputerId(computerID);
-        computer.setPurchaseDate("11.02.2020");
-        computer.setPrice(68300f);
-        return computer;
-    }
 
-    @Qualifier("messageSource")
     @Autowired
-    MessageSource messages;
+    private CollectionHandler collectionHandler;
 
-    public String createComputer(Computer computer, Locale locale){
-        String response = null;
-        if(computer!=null){
-            response = String.format(messages.getMessage(
-                    "computer.create.message", null,locale),
-                    computer.toString());
-        }
-        return response;
+    public Computer getComputer(int computerID){
+        return collectionHandler.findComputerById(computerID);
     }
 
-    public String updateComputer(Computer computer, Locale locale){
-        String response = null;
+
+    public void createComputer(Computer computer){
         if(computer!=null){
-            response = String.format(messages.getMessage(
-                    "computer.update.message", null,locale),
-                    computer.toString());
+            collectionHandler.addComputer(computer);
         }
-        return response;
     }
 
-    public String deleteComputer(String computerId, Locale locale){
-        String response = null;
-        response = String.format(messages.getMessage(
-                "computer.delete.message", null,locale),
-                computerId.toString());
+    public void updateComputer(int computerId,Computer computer){
+        Computer existingComputer = collectionHandler.findComputerById(computerId);
+        if (existingComputer != null) {
+            collectionHandler.getComputers().set(
+                    collectionHandler.getComputers().indexOf(existingComputer),
+                    computer
+            );
+        }
+    }
 
-        return response;
+    public void deleteComputer(int computerId){
+        Computer existingComputer = collectionHandler.findComputerById(computerId);
+        if (existingComputer != null) {
+            collectionHandler.getComputers().remove(existingComputer);
+        }
     }
 }

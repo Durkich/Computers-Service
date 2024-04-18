@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Locale;
-
 @RestController
 @RequestMapping(value = "computers")
 public class ComputerController {
@@ -16,23 +14,26 @@ public class ComputerController {
     private ComputerService computerService;
 
     @RequestMapping(value="/{computerId}",method = RequestMethod.GET)
-    public ResponseEntity<Computer> getComputer(@PathVariable("computerId") String computerId){
+    public ResponseEntity<Computer> getComputer(@PathVariable("computerId") int computerId){
             Computer computer = computerService.getComputer(computerId);
             return ResponseEntity.ok(computer);
     }
-    @PutMapping
-    public ResponseEntity<String> updateComputer(@RequestBody Computer request, @RequestHeader(value = "Accept-Language",required = false) Locale locale){
-        return ResponseEntity.ok(computerService.updateComputer(request, locale));
+    @PutMapping(value="/{computerId}")
+    public ResponseEntity<String> updateComputer(@PathVariable("computerId") int computerId, @RequestBody Computer request){
+        computerService.updateComputer(computerId, request);
+        return ResponseEntity.ok("Компьютер успешно обновлен!");
 
     }
     @PostMapping
-    public ResponseEntity<String> createComputer(@RequestBody Computer request, @RequestHeader(value = "Accept-Language",required = false) Locale locale){
-        return ResponseEntity.ok(computerService.createComputer(request,locale));
+    public ResponseEntity<String> createComputer(@RequestBody Computer request){
+        computerService.createComputer(request);
+        return ResponseEntity.ok("Компьютер успешно создан!");
 
     }
     @DeleteMapping(value="/{computerId}")
-    public ResponseEntity<String> deleteComputer(@PathVariable("computerId") String computerId, @RequestHeader(value = "Accept-Language",required = false) Locale locale){
-        return ResponseEntity.ok(computerService.deleteComputer(computerId, locale));
+    public ResponseEntity<String> deleteComputer(@PathVariable("computerId") int computerId){
+        computerService.deleteComputer(computerId);
+        return ResponseEntity.ok("Компьютер успешно удален!");
     }
 
 
