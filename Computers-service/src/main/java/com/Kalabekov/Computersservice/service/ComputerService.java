@@ -1,7 +1,7 @@
 package com.Kalabekov.Computersservice.service;
 
-import com.Kalabekov.Computersservice.CollectionHandler;
 import com.Kalabekov.Computersservice.model.Computer;
+import com.Kalabekov.Computersservice.repository.ComputerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,33 +9,27 @@ import org.springframework.stereotype.Service;
 public class ComputerService {
 
     @Autowired
-    private CollectionHandler collectionHandler;
+    private ComputerRepository computerRepository;
 
     public Computer getComputer(int computerID){
-        return collectionHandler.findComputerById(computerID);
+        return computerRepository.findById(computerID).orElse(null);
     }
-
 
     public void createComputer(Computer computer){
         if(computer!=null){
-            collectionHandler.addComputer(computer);
+            computerRepository.save(computer);
         }
     }
 
-    public void updateComputer(int computerId,Computer computer){
-        Computer existingComputer = collectionHandler.findComputerById(computerId);
+    public void updateComputer(int computerId, Computer computer){
+        Computer existingComputer = computerRepository.findById(computerId).orElse(null);
         if (existingComputer != null) {
-            collectionHandler.getComputers().set(
-                    collectionHandler.getComputers().indexOf(existingComputer),
-                    computer
-            );
+            computer.setId(computerId);
+            computerRepository.save(computer);
         }
     }
 
     public void deleteComputer(int computerId){
-        Computer existingComputer = collectionHandler.findComputerById(computerId);
-        if (existingComputer != null) {
-            collectionHandler.getComputers().remove(existingComputer);
-        }
+        computerRepository.deleteById(computerId);
     }
 }
