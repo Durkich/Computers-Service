@@ -12,8 +12,8 @@ import java.util.List;
 @ToString
 @Getter
 @Entity
-@Table(name = "computers")
-public class Computer {
+@Table(name = "laptops")
+public class Laptop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -33,11 +33,12 @@ public class Computer {
     @Column(name = "ram")
     private Integer RAM;
 
-    @OneToMany(mappedBy = "computer", cascade = CascadeType.ALL)
+    @Column(name = "display")
+    private String display;
+
+    @OneToMany(mappedBy = "laptop", cascade = CascadeType.ALL)
     private List<Peripheral> peripherals = new ArrayList<>();
 
-    @OneToMany(mappedBy = "computer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "laptop", cascade = CascadeType.ALL)
     private List<Software> software = new ArrayList<>();
-    
 }
-

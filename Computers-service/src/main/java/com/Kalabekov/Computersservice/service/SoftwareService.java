@@ -10,10 +10,14 @@ public class SoftwareService {
     @Autowired
     private SoftwareRepository softwareRepository;
 
-    public Software getSoftware(int softwareID){
+    public Software getSoftware(int softwareID) {
         return softwareRepository.findById(softwareID).orElse(null);
+
     }
 
+    public Iterable<Software> getAllSoftware(){
+        return softwareRepository.findAll();
+    }
 
     public void createSoftware(Software software){
         if(software!=null){

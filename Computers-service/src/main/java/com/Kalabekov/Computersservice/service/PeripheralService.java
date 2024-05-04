@@ -13,6 +13,10 @@ public class PeripheralService {
         return peripheralRepository.findById(peripheralID).orElse(null);
     }
 
+    public Iterable<Peripheral> getAllPeripherals(){
+        return peripheralRepository.findAll();
+    }
+
 
     public void createPeripheral(Peripheral peripheral){
         if(peripheral!=null){

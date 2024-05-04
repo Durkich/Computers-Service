@@ -18,18 +18,26 @@ public class PeripheralController {
         Peripheral peripheral = peripheralService.getPeripheral(peripheralId);
         return ResponseEntity.ok(peripheral);
     }
+    @GetMapping
+    public ResponseEntity<Iterable<Peripheral>> getAllPeripherals(){
+        Iterable<Peripheral> peripherals = peripheralService.getAllPeripherals();
+        return ResponseEntity.ok(peripherals);
+    }
+
     @PutMapping(value="/{peripheralId}")
     public ResponseEntity<String> updatePeripheral(@PathVariable("peripheralId") int peripheralId, @RequestBody Peripheral request){
         peripheralService.updatePeripheral(peripheralId, request);
         return ResponseEntity.ok("Переферия успешно обновлена!");
 
     }
+
     @PostMapping
     public ResponseEntity<String> createPeripheral(@RequestBody Peripheral request){
         peripheralService.createPeripheral(request);
         return ResponseEntity.ok("Переферия успешно создана!");
 
     }
+
     @DeleteMapping(value="/{peripheralId}")
     public ResponseEntity<String> deletePeripheral(@PathVariable("peripheralId") int peripheralId){
         peripheralService.deletePeripheral(peripheralId);

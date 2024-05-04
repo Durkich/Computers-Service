@@ -18,6 +18,13 @@ public class ComputerController {
             Computer computer = computerService.getComputer(computerId);
             return ResponseEntity.ok(computer);
     }
+
+    @GetMapping
+    public ResponseEntity<Iterable<Computer>> getAllComputers() {
+        Iterable<Computer> computers = computerService.findAllComputers();
+        return ResponseEntity.ok(computers);
+    }
+
     @PutMapping(value="/{computerId}")
     public ResponseEntity<String> updateComputer(@PathVariable("computerId") int computerId, @RequestBody Computer request){
         computerService.updateComputer(computerId, request);

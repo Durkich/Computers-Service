@@ -15,6 +15,10 @@ public class ComputerService {
         return computerRepository.findById(computerID).orElse(null);
     }
 
+    public Iterable<Computer> findAllComputers() {
+        return computerRepository.findAll();
+    }
+
     public void createComputer(Computer computer){
         if(computer!=null){
             computerRepository.save(computer);
