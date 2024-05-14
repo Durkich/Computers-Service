@@ -1,4 +1,5 @@
 package com.Kalabekov.Computersservice.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.ToString;
 
 @Setter @ToString @Getter
 @Entity
-@Table(name = "peripherals")
+@Table(name = "peripherals",schema = "infrastructure")
 public class Peripheral {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +20,12 @@ public class Peripheral {
     @Column(name = "peripheral_type")
     private String PeripheralType;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "computer_id")
     private Computer computer;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "laptop_id")
     private Laptop laptop;

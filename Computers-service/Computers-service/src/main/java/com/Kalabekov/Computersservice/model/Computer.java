@@ -1,4 +1,5 @@
 package com.Kalabekov.Computersservice.model;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.util.List;
 @ToString
 @Getter
 @Entity
-@Table(name = "computers")
+@Table(name = "computers",schema = "infrastructure")
 public class Computer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +34,11 @@ public class Computer {
     @Column(name = "ram")
     private Integer RAM;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "computer", cascade = CascadeType.ALL)
     private List<Peripheral> peripherals = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "computer", cascade = CascadeType.ALL)
     private List<Software> software = new ArrayList<>();
     

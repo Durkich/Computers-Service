@@ -1,4 +1,5 @@
 package com.Kalabekov.Computersservice.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.ToString;
 
 @Setter @ToString @Getter
 @Entity
-@Table(name = "software")
+@Table(name = "software",schema = "infrastructure")
 public class Software {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +23,12 @@ public class Software {
     @Column(name = "is_licensed")
     private boolean isLicensed;
 
-    @Column(name = "computer_id")
-    private int computerId;
-
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "computer_id")
     private Computer computer;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "laptop_id")
     private Laptop laptop;

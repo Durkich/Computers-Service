@@ -18,6 +18,7 @@ public class SoftwareController {
         Software software = softwareService.getSoftware(softwareId);
         return ResponseEntity.ok(software);
     }
+    @GetMapping
     public ResponseEntity<Iterable<Software>> getAllSoftware(){
         Iterable<Software> software = softwareService.getAllSoftware();
         return ResponseEntity.ok(software);
