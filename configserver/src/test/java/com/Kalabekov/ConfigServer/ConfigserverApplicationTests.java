@@ -1,4 +1,4 @@
-package com.Computersservice.configserver;
+package com.Kalabekov.ConfigServer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
