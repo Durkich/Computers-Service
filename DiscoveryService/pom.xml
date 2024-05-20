@@ -11,7 +11,7 @@
 	<groupId>com.Kalabekov</groupId>
 	<artifactId>eurekaserver</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>DiscoveryService</name>
+	<name>eurekaserver</name>
 	<description>Discovery service for computer service app</description>
 	<properties>
 		<java.version>17</java.version>
