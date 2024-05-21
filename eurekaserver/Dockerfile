@@ -1,4 +1,3 @@
-
 FROM openjdk:17-oracle as build
 
 
@@ -23,4 +22,4 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
 
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.Kalabekov.DiscoveryService.DiscoveryServiceApplication"]
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.Kalabekov.eurekaserver.EurekaServerApplication"]

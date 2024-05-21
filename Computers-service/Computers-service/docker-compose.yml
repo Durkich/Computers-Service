@@ -21,7 +21,7 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/1-init.sql
       - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
   configserver:
-    image: ostock/configserver:0.0.1-SNAPSHOT
+    image: kalabekov/configserver:0.0.1-SNAPSHOT
     ports:
       - "8071:8071"
     networks:
@@ -30,7 +30,7 @@ services:
           - "configserver"
 
   eurekaserver:
-    image: ostock/eurekaserver:0.0.1-SNAPSHOT
+    image: kalabekov/eurekaserver:0.0.1-SNAPSHOT
     ports:
       - "8070:8070"
     depends_on:
@@ -44,7 +44,7 @@ services:
           - "eurekaserver"
 
   computers-service:
-    image: ostock/computers-service:0.0.1-SNAPSHOT
+    image: kalabekov/computers-service:0.0.1-SNAPSHOT
     environment:
       PROFILE: "dev"
       CONFIGSERVER_URI: "http://configserver:8071"
