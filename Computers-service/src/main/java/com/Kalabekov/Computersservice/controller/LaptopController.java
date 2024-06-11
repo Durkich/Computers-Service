@@ -1,47 +1,69 @@
 package com.Kalabekov.Computersservice.controller;
 
-
 import com.Kalabekov.Computersservice.model.Laptop;
 import com.Kalabekov.Computersservice.service.LaptopService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-
-@RestController
-@RequestMapping(value = "laptops")
+@Controller
+@RequestMapping("/laptops")
 public class LaptopController {
 
     @Autowired
     private LaptopService laptopService;
 
-    @GetMapping(value="/{laptopId}")
-    public ResponseEntity<Laptop> getLaptop(@PathVariable("laptopId") int laptopId){
+    @GetMapping("/{laptopId}")
+    public String getLaptop(@PathVariable("laptopId") int laptopId, Model model) {
         Laptop laptop = laptopService.getLaptop(laptopId);
-        return ResponseEntity.ok(laptop);
+        model.addAttribute("laptop", laptop);
+        return "Laptops";
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Laptop>> getAllLaptops() {
+    public String getAllLaptops(Model model) {
         Iterable<Laptop> laptops = laptopService.findAllLaptops();
-        return ResponseEntity.ok(laptops);
+        model.addAttribute("laptops", laptops);
+        return "Laptops";
     }
 
-    @PutMapping(value="/{laptopId}")
-    public ResponseEntity<String> updateLaptop(@PathVariable("laptopId") int laptopId, @RequestBody Laptop request){
+    @PostMapping("/update/{laptopId}")
+    public String updateLaptop(@PathVariable("laptopId") int laptopId, @ModelAttribute Laptop request, Model model) {
         laptopService.updateLaptop(laptopId, request);
-        return ResponseEntity.ok("Ноутбук успешно обновлен!");
+        return "redirect:/laptops";
     }
 
-    @PostMapping
-    public ResponseEntity<String> createLaptop(@RequestBody Laptop request){
+    @PostMapping("/create")
+    public String createLaptop(@ModelAttribute Laptop request, Model model) {
         laptopService.createLaptop(request);
-        return ResponseEntity.ok("Ноутбук успешно создан!");
+        return "redirect:/laptops";
     }
 
-    @DeleteMapping(value="/{laptopId}")
-    public ResponseEntity<String> deleteLaptop(@PathVariable("laptopId") int laptopId){
+    @GetMapping("/delete/{laptopId}")
+    public String deleteLaptop(@PathVariable("laptopId") int laptopId, Model model) {
         laptopService.deleteLaptop(laptopId);
-        return ResponseEntity.ok("Ноутбук успешно удален!");
+        return "redirect:/laptops";
+    }
+
+    @GetMapping("/modal/delete/{laptopId}")
+    public String deleteLaptopConfirmation(@PathVariable("laptopId") int laptopId, ModelMap model) {
+        Laptop laptop = laptopService.getLaptop(laptopId);
+        model.addAttribute("laptop", laptop);
+        return "DeleteLaptop :: delete-laptop";
+    }
+    @GetMapping("/modal/edit/{laptopId}")
+    public String editLaptopModal(@PathVariable("laptopId") int laptopId, ModelMap model) {
+        Laptop laptop = laptopService.getLaptop(laptopId);
+        model.addAttribute("laptop", laptop);
+        return "EditLaptop :: edit-laptop";
+    }
+
+    @GetMapping("/modal/add")
+    public String addLaptopModal(ModelMap model) {
+        Laptop laptop = new Laptop();
+        model.addAttribute("laptop", laptop);
+        return "CreateLaptop :: add-laptop";
     }
 }

@@ -2,46 +2,90 @@ package com.Kalabekov.Computersservice.controller;
 
 import com.Kalabekov.Computersservice.model.Software;
 import com.Kalabekov.Computersservice.service.SoftwareService;
+import com.Kalabekov.Computersservice.model.Computer;
+import com.Kalabekov.Computersservice.model.Laptop;
+import com.Kalabekov.Computersservice.repository.ComputerRepository;
+import com.Kalabekov.Computersservice.repository.LaptopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping(value = "software")
+@Controller
+@RequestMapping("/software")
 public class SoftwareController {
 
     @Autowired
     SoftwareService softwareService;
 
-    @RequestMapping(value="/{softwareId}",method = RequestMethod.GET)
-    public ResponseEntity<Software> getSoftware(@PathVariable("softwareId") int softwareId){
-        Software software = softwareService.getSoftware(softwareId);
-        return ResponseEntity.ok(software);
-    }
+    @Autowired
+    ComputerRepository computerRepository;
+
+    @Autowired
+    LaptopRepository laptopRepository;
+    
+
     @GetMapping
-    public ResponseEntity<Iterable<Software>> getAllSoftware(){
+    public String getAllSoftware(Model model) {
         Iterable<Software> software = softwareService.getAllSoftware();
-        return ResponseEntity.ok(software);
+        model.addAttribute("softwareList", software);
+        return "Software";  
     }
 
-    @PutMapping(value="/{softwareId}")
-    public ResponseEntity<String> updateSoftware(@PathVariable("peripheralId") int peripheralId, @RequestBody Software request){
-        softwareService.updateSoftware(peripheralId, request);
-        return ResponseEntity.ok("ПО успешно обновлено!");
-
+    @PostMapping("/update/{softwareId}")
+    public String updateSoftware(@PathVariable("softwareId") int softwareId,
+                                 @ModelAttribute Software request,
+                                 @RequestParam(name = "isLicensed", required = false) String isLicensed,
+                                 Model model) {
+        boolean isLicensedValue = isLicensed != null;
+        request.setLicensed(isLicensedValue);
+        softwareService.updateSoftware(softwareId, request);
+        return "redirect:/software";
     }
 
-    @PostMapping
-    public ResponseEntity<String> createSoftware(@RequestBody Software request){
+    @PostMapping("/create")
+    public String createSoftware(@ModelAttribute Software request,
+                                 @RequestParam(name = "isLicensed", required = false) String isLicensed,
+                                 Model model) {
+        boolean isLicensedValue = isLicensed != null;
+        request.setLicensed(isLicensedValue);
         softwareService.createSoftware(request);
-        return ResponseEntity.ok("ПО успешно создано!");
-
+        return "redirect:/software";
     }
 
-    @DeleteMapping(value="/{softwareId}")
-    public ResponseEntity<String> deleteSoftware(@PathVariable("softwareId") int softwareId){
+    @GetMapping("/delete/{softwareId}")
+    public String deleteSoftware(@PathVariable("softwareId") int softwareId, Model model) {
         softwareService.deleteSoftware(softwareId);
-        return ResponseEntity.ok("ПО успешно удалено!");
+        return "redirect:/software";
     }
 
+    @GetMapping("/modal/delete/{softwareId}")
+    public String deleteSoftwareConfirmation(@PathVariable("softwareId") int softwareId, ModelMap model) {
+        Software software = softwareService.getSoftware(softwareId);
+        model.addAttribute("software", software);
+        return "DeleteSoftware :: delete-software";
+    }
+
+    @GetMapping("/modal/edit/{softwareId}")
+    public String editSoftwareModal(@PathVariable("softwareId") int softwareId, ModelMap model) {
+        Software software = softwareService.getSoftware(softwareId);
+        Iterable<Computer> computers = computerRepository.findAll();
+        Iterable<Laptop> laptops = laptopRepository.findAll();
+        model.addAttribute("software", software);
+        model.addAttribute("computers", computers);
+        model.addAttribute("laptops", laptops);
+        return "EditSoftware :: edit-software";
+    }
+
+    @GetMapping("/modal/add")
+    public String addSoftwareModal(ModelMap model) {
+        Software software = new Software();
+        Iterable<Computer> computers = computerRepository.findAll();
+        Iterable<Laptop> laptops = laptopRepository.findAll();
+        model.addAttribute("software", software);
+        model.addAttribute("computers", computers);
+        model.addAttribute("laptops", laptops);
+        return "CreateSoftware :: add-software";
+    }
 }

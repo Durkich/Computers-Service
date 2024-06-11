@@ -3,47 +3,68 @@ package com.Kalabekov.Computersservice.controller;
 import com.Kalabekov.Computersservice.model.Computer;
 import com.Kalabekov.Computersservice.service.ComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping(value = "computers")
+@Controller
+@RequestMapping("/computers")
 public class ComputerController {
 
     @Autowired
     private ComputerService computerService;
 
-    @RequestMapping(value="/{computerId}",method = RequestMethod.GET)
-    public ResponseEntity<Computer> getComputer(@PathVariable("computerId") int computerId){
-            Computer computer = computerService.getComputer(computerId);
-            return ResponseEntity.ok(computer);
+    @GetMapping("/{computerId}")
+    public String getComputer(@PathVariable("computerId") int computerId, Model model) {
+        Computer computer = computerService.getComputer(computerId);
+        model.addAttribute("computer", computer);
+        return "Computers";
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Computer>> getAllComputers() {
+    public String getAllComputers(Model model) {
         Iterable<Computer> computers = computerService.findAllComputers();
-        return ResponseEntity.ok(computers);
+        model.addAttribute("computers", computers);
+        return "Computers";
     }
 
-    @PutMapping(value="/{computerId}")
-    public ResponseEntity<String> updateComputer(@PathVariable("computerId") int computerId, @RequestBody Computer request){
-        computerService.updateComputer(computerId, request);
-        return ResponseEntity.ok("Компьютер успешно обновлен!");
-
-    }
-    @PostMapping
-    public ResponseEntity<String> createComputer(@RequestBody Computer request){
+    @PostMapping("/create")
+    public String createComputer(@ModelAttribute Computer request, Model model) {
         computerService.createComputer(request);
-        return ResponseEntity.ok("Компьютер успешно создан!");
-
+        return "redirect:/computers";
     }
-    @DeleteMapping(value="/{computerId}")
-    public ResponseEntity<String> deleteComputer(@PathVariable("computerId") int computerId){
+
+    @PostMapping("/update/{computerId}")
+    public String updateComputer(@PathVariable("computerId") int computerId, @ModelAttribute Computer request, Model model) {
+        computerService.updateComputer(computerId, request);
+        return "redirect:/computers";
+    }
+
+    @GetMapping("/delete/{computerId}")
+    public String deleteComputer(@PathVariable("computerId") int computerId, Model model) {
         computerService.deleteComputer(computerId);
-        return ResponseEntity.ok("Компьютер успешно удален!");
+        return "redirect:/computers";
     }
 
+    @GetMapping("/modal/delete/{computerId}")
+    public String deleteComputerConfirmation(@PathVariable("computerId") int computerId, ModelMap model) {
+        Computer computer = computerService.getComputer(computerId);
+        model.addAttribute("computer", computer);
+        return "DeleteComputer :: delete-computer";
+    }
 
+    @GetMapping("/modal/edit/{computerId}")
+    public String editComputerModal(@PathVariable("computerId") int computerId, ModelMap model) {
+        Computer computer = computerService.getComputer(computerId);
+        model.addAttribute("computer", computer);
+        return "EditComputer :: edit-computer";
+    }
 
-
+    @GetMapping("/modal/add")
+    public String addComputerModal(ModelMap model) {
+        Computer computer = new Computer();
+        model.addAttribute("computer", computer);
+        return "CreateComputer :: add-computer";
+    }
 }

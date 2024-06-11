@@ -17,7 +17,7 @@ import java.util.List;
 public class Computer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "inventory_number")
     private String inventoryNumber;
@@ -29,17 +29,17 @@ public class Computer {
     private String processor;
 
     @Column(name = "rom")
-    private Integer ROM;
+    private Integer rom;
 
     @Column(name = "ram")
-    private Integer RAM;
+    private Integer ram;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "computer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "computer", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Peripheral> peripherals = new ArrayList<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "computer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "computer", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Software> software = new ArrayList<>();
     
 }

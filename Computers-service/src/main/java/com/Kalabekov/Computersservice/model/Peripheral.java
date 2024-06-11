@@ -12,19 +12,19 @@ import lombok.ToString;
 public class Peripheral {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "peripheral_name")
     private String peripheralName;
 
     @Column(name = "peripheral_type")
-    private String PeripheralType;
+    private String peripheralType;
 
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "computer_id")
     private Computer computer;
-
+    
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "laptop_id")

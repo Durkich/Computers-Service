@@ -12,7 +12,7 @@ import lombok.ToString;
 public class Software {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "software_name")
     private String softwareName;
@@ -32,4 +32,5 @@ public class Software {
     @ManyToOne
     @JoinColumn(name = "laptop_id")
     private Laptop laptop;
+    
 }
