@@ -1,0 +1,54 @@
+client-id: computers-service
+resource-url: http://localhost:8080/realms/ComputerServiceRealm/protocol/openid-connect/token
+grant-type: password
+
+spring:
+  mvc:
+    static-path-pattern: /static/**
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    cache: false
+  datasource:
+    url: jdbc:postgresql://database:5432/ComputersService
+    username: postgres
+    password: psix19990
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+      enabled-by-default: true
+  eureka:
+    instance:
+      preferIpAddress: true
+    client:
+      registerWithEureka: true
+      fetchRegistry: true
+      serviceUrl:
+        defaultZone: http://eurekaserver:8070/eureka/
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: computers-service
+            authorization-grant-type: authorization_code
+            scope: openid
+            resource-url: http://localhost:8080/realms/ComputerServiceRealm/protocol/openid-connect/token
+            grant-type: password
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/ComputerServiceRealm
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/ComputerServiceRealm
